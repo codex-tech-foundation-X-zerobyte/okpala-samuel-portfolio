@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - lil-kremz-implement-portfolio-website
   workflow_dispatch:
 
 permissions:
