@@ -1,34 +1,440 @@
-import { useEffect, useState } from 'react'
-import { ArrowUpRight, Check, Download, ExternalLink, Github, Linkedin, Mail, Menu, Moon, Send, Sun, X } from 'lucide-react'
-import { certifications, education, experience, profile, projects, services, skills, socialLinks, technologies } from './data/portfolio'
+import { useEffect, useState } from "react";
+import {
+  ArrowUpRight,
+  Check,
+  Download,
+  ExternalLink,
+  Github,
+  Linkedin,
+  Mail,
+  Menu,
+  Moon,
+  Send,
+  Sun,
+  X,
+} from "lucide-react";
+import {
+  certifications,
+  education,
+  experience,
+  profile,
+  projects,
+  services,
+  skills,
+  socialLinks,
+  technologies,
+} from "./data/portfolio";
 
-const nav = [['About', 'about'], ['Skills', 'skills'], ['Projects', 'projects'], ['Experience', 'experience'], ['Contact', 'contact']]
+const nav = [
+  ["About", "about"],
+  ["Skills", "skills"],
+  ["Projects", "projects"],
+  ["Experience", "experience"],
+  ["Contact", "contact"],
+];
 
-function Section({ id, eyebrow, title, children, className = '' }: { id: string; eyebrow: string; title: string; children: React.ReactNode; className?: string }) {
-  return <section id={id} className={`section ${className}`}><div className="container"><p className="eyebrow">{eyebrow}</p><h2>{title}</h2>{children}</div></section>
+function Section({
+  id,
+  eyebrow,
+  title,
+  children,
+  className = "",
+}: {
+  id: string;
+  eyebrow: string;
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <section id={id} className={`section ${className}`}>
+      <div className="container">
+        <p className="eyebrow">{eyebrow}</p>
+        <h2>{title}</h2>
+        {children}
+      </div>
+    </section>
+  );
 }
 
 function App() {
-  const [dark, setDark] = useState(() => localStorage.getItem('theme') === 'dark')
-  const [menuOpen, setMenuOpen] = useState(false)
-  useEffect(() => { document.documentElement.dataset.theme = dark ? 'dark' : 'light'; localStorage.setItem('theme', dark ? 'dark' : 'light') }, [dark])
-  return <div className="site">
-    <header className="header"><div className="container nav-wrap">
-      <a href="#home" className="brand" aria-label="Go to homepage"><span className="brand-mark">O</span><span>{profile.name.split(' ')[0]}<b>.</b></span></a>
-      <nav className={menuOpen ? 'nav-links open' : 'nav-links'} aria-label="Main navigation">{nav.map(([label, id]) => <a key={id} href={`#${id}`} onClick={() => setMenuOpen(false)}>{label}</a>)}<a className="nav-cta" href="#contact" onClick={() => setMenuOpen(false)}>Let’s talk <ArrowUpRight size={16} /></a></nav>
-      <div className="nav-actions"><button className="icon-button" aria-label={`Switch to ${dark ? 'light' : 'dark'} theme`} onClick={() => setDark(!dark)}>{dark ? <Sun size={18} /> : <Moon size={18} />}</button><button className="icon-button menu-toggle" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button></div>
-    </div></header>
-    <main id="main-content">
-      <section id="home" className="hero"><div className="container hero-grid"><div className="hero-copy"><p className="kicker"><span className="status-dot" /> {profile.availability}</p><h1>Building useful<br /><em>technology</em> for real life.</h1><p className="hero-text">{profile.intro}</p><div className="button-row"><a className="button primary" href="#projects">View my work <ArrowUpRight size={17} /></a><a className="button secondary" href="#contact">Get in touch <Mail size={17} /></a></div><div className="hero-meta"><span>{profile.location}</span><span className="meta-line" /><span>Available for select projects</span></div></div><div className="hero-aside"><div className="portrait">{profile.image ? <img src={profile.image} alt={`${profile.name} portrait`} /> : <span>OCS</span>}</div><div className="hero-card"><span className="card-label">Currently exploring</span><strong>Web development, systems &amp; entrepreneurship</strong><span className="card-arrow">↗</span></div></div></div></section>
-      <Section id="about" eyebrow="01 — About me" title="A developer who cares about the why."><div className="about-grid"><div className="lead-copy"><p>{profile.story[0]}</p><p>{profile.story[1]}</p></div><div className="story-copy">{profile.story.slice(2).map((p) => <p key={p}>{p}</p>)}</div></div></Section>
-      <Section id="skills" eyebrow="02 — Capabilities" title="Tools for turning ideas into reality."><div className="skills-grid">{skills.map((skill) => <article className="skill-card" key={skill.name}><div className="skill-top"><span className="skill-category">{skill.category}</span><span className="skill-level">{skill.level}</span></div><h3>{skill.name}</h3><p>{skill.description}</p><div className="meter" role="progressbar" aria-label={`${skill.name} confidence`} aria-valuenow={skill.proficiency} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${skill.proficiency}%` }} /></div></article>)}</div><div className="tech-row"><p className="eyebrow">Technology stack</p><div className="tech-list">{technologies.map((tech) => <span key={tech}>{tech}</span>)}</div></div></Section>
-      <Section id="projects" eyebrow="03 — Selected work" title="Projects with a purpose." className="projects-section"><div className="project-list">{projects.map((project) => <article className="project-card" key={project.name}><div className="project-image">{project.image ? <img src={project.image} alt="" loading="lazy" /> : <div className="image-placeholder"><span>01</span><strong>{project.name}</strong></div>}</div><div className="project-content"><div className="project-heading"><span className="project-type">{project.type}</span><span className="project-status"><span /> {project.status}</span></div><h3>{project.name}</h3><p>{project.shortDescription}</p><details><summary>Project details</summary><p>{project.description}</p><p><strong>My role:</strong> {project.role}</p></details><div className="tag-list">{project.technologies.map((tech) => <span key={tech}>{tech}</span>)}</div><div className="project-links">{project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noreferrer">View live project <ExternalLink size={15} /></a>}{project.githubUrl && <a href={project.githubUrl} target="_blank" rel="noreferrer"><Github size={15} /> Source code</a>}</div></div></article>)}</div></Section>
-      {experience.length > 0 && <Section id="experience" eyebrow="04 — Experience" title="Learning by building."><div className="timeline">{experience.map((item) => <article className="timeline-item" key={item.organization}><div className="timeline-marker" /><div className="timeline-date">{item.start} — {item.end}</div><div className="timeline-content"><h3>{item.role}</h3><h4>{item.organization}</h4><p>{item.description}</p><ul>{item.responsibilities.map((r) => <li key={r}><Check size={15} />{r}</li>)}</ul><div className="tag-list">{item.technologies.map((tech) => <span key={tech}>{tech}</span>)}</div></div></article>)}</div><div className="education"><div><p className="eyebrow">Education</p><h3>{education[0].course}</h3><p>{education[0].institution} · {education[0].start} — {education[0].end}</p></div><span className="education-icon">◎</span></div></Section>}
-      {services.length > 0 && <Section id="services" eyebrow="05 — Services" title="Ways I can help."><div className="services-grid">{services.map((service, i) => <div className="service" key={service}><span>0{i + 1}</span><h3>{service}</h3><ArrowUpRight size={18} /></div>)}</div></Section>}
-      {certifications.length > 0 && <Section id="certifications" eyebrow="06 — Achievements" title="Milestones."><div /></Section>}
-      <Section id="contact" eyebrow="06 — Contact" title="Have an idea? Let’s talk."><div className="contact-grid"><div><p className="contact-lead">I’m always open to thoughtful conversations, interesting problems, and opportunities to build something useful.</p><a className="email-link" href={`mailto:${profile.email}`}>{profile.email} <ArrowUpRight size={18} /></a><div className="socials">{socialLinks.filter((l) => l.href).map((link) => <a href={link.href} key={link.label} target={link.href.startsWith('http') ? '_blank' : undefined} rel="noreferrer">{link.icon === 'github' ? <Github size={17} /> : link.icon === 'linkedin' ? <Linkedin size={17} /> : <Mail size={17} />}{link.label}</a>)}</div></div><form className="contact-form" onSubmit={(e) => e.preventDefault()}><div className="form-note">Contact form is ready to connect to Formspree, Resend, EmailJS, or your backend.</div><label>Name<input name="name" required placeholder="Your name" /></label><label>Email<input name="email" type="email" required placeholder="you@example.com" /></label><label>Subject<input name="subject" required placeholder="How can I help?" /></label><label>Message<textarea name="message" required rows={4} placeholder="Tell me a little about your project..." /></label><button className="button primary" type="submit">Send message <Send size={16} /></button></form></div></Section>
-    </main>
-    <footer><div className="container footer-inner"><span>© {new Date().getFullYear()} {profile.name}</span><span>Designed &amp; built with intention.</span><a href="#home" aria-label="Back to top">Back to top ↑</a></div></footer>
-  </div>
+  const [dark, setDark] = useState(
+    () => localStorage.getItem("theme") === "dark",
+  );
+  const [menuOpen, setMenuOpen] = useState(false);
+  useEffect(() => {
+    document.documentElement.dataset.theme = dark ? "dark" : "light";
+    localStorage.setItem("theme", dark ? "dark" : "light");
+  }, [dark]);
+  return (
+    <div className="site">
+      <header className="header">
+        <div className="container nav-wrap">
+          <a href="#home" className="brand" aria-label="Go to homepage">
+            <span className="brand-mark">O</span>
+            <span>
+              {profile.name.split(" ")[0]}
+              <b>.</b>
+            </span>
+          </a>
+          <nav
+            className={menuOpen ? "nav-links open" : "nav-links"}
+            aria-label="Main navigation"
+          >
+            {nav.map(([label, id]) => (
+              <a key={id} href={`#${id}`} onClick={() => setMenuOpen(false)}>
+                {label}
+              </a>
+            ))}
+            <a
+              className="nav-cta"
+              href="#contact"
+              onClick={() => setMenuOpen(false)}
+            >
+              Let’s talk <ArrowUpRight size={16} />
+            </a>
+          </nav>
+          <div className="nav-actions">
+            <button
+              className="icon-button"
+              aria-label={`Switch to ${dark ? "light" : "dark"} theme`}
+              onClick={() => setDark(!dark)}
+            >
+              {dark ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+            <button
+              className="icon-button menu-toggle"
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              {menuOpen ? <X /> : <Menu />}
+            </button>
+          </div>
+        </div>
+      </header>
+      <main id="main-content">
+        <section id="home" className="hero">
+          <div className="container hero-grid">
+            <div className="hero-copy">
+              <p className="kicker">
+                <span className="status-dot" /> {profile.availability}
+              </p>
+              <h1>
+                Building useful
+                <br />
+                <em>technology</em> for real life.
+              </h1>
+              <p className="hero-text">{profile.intro}</p>
+              <div className="button-row">
+                <a className="button primary" href="#projects">
+                  View my work <ArrowUpRight size={17} />
+                </a>
+                <a className="button secondary" href="#contact">
+                  Get in touch <Mail size={17} />
+                </a>
+              </div>
+              <div className="hero-meta">
+                <span>{profile.location}</span>
+                <span className="meta-line" />
+                <span>Available for select projects</span>
+              </div>
+            </div>
+            <div className="hero-aside">
+              <div className="portrait">
+                {profile.image ? (
+                  <img src={profile.image} alt={`${profile.name} portrait`} />
+                ) : (
+                  <span>OCS</span>
+                )}
+              </div>
+              <div className="hero-card">
+                <span className="card-label">Currently exploring</span>
+                <strong>Web development, systems &amp; entrepreneurship</strong>
+                <span className="card-arrow">↗</span>
+              </div>
+            </div>
+          </div>
+        </section>
+        <Section
+          id="about"
+          eyebrow="01 — About me"
+          title="A developer who cares about the why."
+        >
+          <div className="about-grid">
+            <div className="lead-copy">
+              <p>{profile.story[0]}</p>
+              <p>{profile.story[1]}</p>
+            </div>
+            <div className="story-copy">
+              {profile.story.slice(2).map((p) => (
+                <p key={p}>{p}</p>
+              ))}
+            </div>
+          </div>
+        </Section>
+        <Section
+          id="skills"
+          eyebrow="02 — Capabilities"
+          title="Tools for turning ideas into reality."
+        >
+          <div className="skills-grid">
+            {skills.map((skill) => (
+              <article className="skill-card" key={skill.name}>
+                <div className="skill-top">
+                  <span className="skill-category">{skill.category}</span>
+                  <span className="skill-level">{skill.level}</span>
+                </div>
+                <h3>{skill.name}</h3>
+                <p>{skill.description}</p>
+                <div
+                  className="meter"
+                  role="progressbar"
+                  aria-label={`${skill.name} confidence`}
+                  aria-valuenow={skill.proficiency}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                >
+                  <span style={{ width: `${skill.proficiency}%` }} />
+                </div>
+              </article>
+            ))}
+          </div>
+          <div className="tech-row">
+            <p className="eyebrow">Technology stack</p>
+            <div className="tech-list">
+              {technologies.map((tech) => (
+                <span key={tech}>{tech}</span>
+              ))}
+            </div>
+          </div>
+        </Section>
+        <Section
+          id="projects"
+          eyebrow="03 — Selected work"
+          title="Projects with a purpose."
+          className="projects-section"
+        >
+          <div className="project-list">
+            {projects.map((project) => (
+              <article className="project-card" key={project.name}>
+                <div className="project-image">
+                  {project.image ? (
+                    <img src={project.image} alt="" loading="lazy" />
+                  ) : (
+                    <div className="image-placeholder">
+                      <span>01</span>
+                      <strong>{project.name}</strong>
+                    </div>
+                  )}
+                </div>
+                <div className="project-content">
+                  <div className="project-heading">
+                    <span className="project-type">{project.type}</span>
+                    <span className="project-status">
+                      <span /> {project.status}
+                    </span>
+                  </div>
+                  <h3>{project.name}</h3>
+                  <p>{project.shortDescription}</p>
+                  <details>
+                    <summary>Project details</summary>
+                    <p>{project.description}</p>
+                    <p>
+                      <strong>My role:</strong> {project.role}
+                    </p>
+                  </details>
+                  <div className="tag-list">
+                    {project.technologies.map((tech) => (
+                      <span key={tech}>{tech}</span>
+                    ))}
+                  </div>
+                  <div className="project-links">
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        View live project <ExternalLink size={15} />
+                      </a>
+                    )}
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <Github size={15} /> Source code
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </Section>
+        {experience.length > 0 && (
+          <Section
+            id="experience"
+            eyebrow="04 — Experience"
+            title="Learning by building."
+          >
+            <div className="timeline">
+              {experience.map((item) => (
+                <article className="timeline-item" key={item.organization}>
+                  <div className="timeline-marker" />
+                  <div className="timeline-date">
+                    {item.start} — {item.end}
+                  </div>
+                  <div className="timeline-content">
+                    <h3>{item.role}</h3>
+                    <h4>{item.organization}</h4>
+                    <p>{item.description}</p>
+                    <ul>
+                      {item.responsibilities.map((r) => (
+                        <li key={r}>
+                          <Check size={15} />
+                          {r}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="tag-list">
+                      {item.technologies.map((tech) => (
+                        <span key={tech}>{tech}</span>
+                      ))}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div className="education">
+              <div>
+                <p className="eyebrow">Education</p>
+                <h3>{education[0].course}</h3>
+                <p>
+                  {education[0].institution} · {education[0].start} —{" "}
+                  {education[0].end}
+                </p>
+              </div>
+              <span className="education-icon">◎</span>
+            </div>
+          </Section>
+        )}
+        {services.length > 0 && (
+          <Section
+            id="services"
+            eyebrow="05 — Services"
+            title="Ways I can help."
+          >
+            <div className="services-grid">
+              {services.map((service, i) => (
+                <div className="service" key={service}>
+                  <span>0{i + 1}</span>
+                  <h3>{service}</h3>
+                  <ArrowUpRight size={18} />
+                </div>
+              ))}
+            </div>
+          </Section>
+        )}
+        {certifications.length > 0 && (
+          <Section
+            id="certifications"
+            eyebrow="06 — Achievements"
+            title="Milestones."
+          >
+            <div />
+          </Section>
+        )}
+        <Section
+          id="contact"
+          eyebrow="06 — Contact"
+          title="Have an idea? Let’s talk."
+        >
+          <div className="contact-grid">
+            <div>
+              <p className="contact-lead">
+                I’m always open to thoughtful conversations, interesting
+                problems, and opportunities to build something useful.
+              </p>
+              <a className="email-link" href={`mailto:${profile.email}`}>
+                {profile.email} <ArrowUpRight size={18} />
+              </a>
+              <div className="socials">
+                {socialLinks
+                  .filter((l) => l.href)
+                  .map((link) => (
+                    <a
+                      href={link.href}
+                      key={link.label}
+                      target={
+                        link.href.startsWith("http") ? "_blank" : undefined
+                      }
+                      rel="noreferrer"
+                    >
+                      {link.icon === "github" ? (
+                        <Github size={17} />
+                      ) : link.icon === "linkedin" ? (
+                        <Linkedin size={17} />
+                      ) : (
+                        <Mail size={17} />
+                      )}
+                      {link.label}
+                    </a>
+                  ))}
+              </div>
+            </div>
+            <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+              <div className="form-note">
+                Contact form is ready to connect to Formspree, Resend, EmailJS,
+                or your backend.
+              </div>
+              <label>
+                Name
+                <input name="name" required placeholder="Your name" />
+              </label>
+              <label>
+                Email
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="you@example.com"
+                />
+              </label>
+              <label>
+                Subject
+                <input name="subject" required placeholder="How can I help?" />
+              </label>
+              <label>
+                Message
+                <textarea
+                  name="message"
+                  required
+                  rows={4}
+                  placeholder="Tell me a little about your project..."
+                />
+              </label>
+              <button className="button primary" type="submit">
+                Send message <Send size={16} />
+              </button>
+            </form>
+          </div>
+        </Section>
+      </main>
+      <footer>
+        <div className="container footer-inner">
+          <span>
+            © {new Date().getFullYear()} {profile.name}
+          </span>
+          <span>Designed &amp; built with intention.</span>
+          <a href="#home" aria-label="Back to top">
+            Back to top ↑
+          </a>
+        </div>
+      </footer>
+    </div>
+  );
 }
-export default App
+export default App;
